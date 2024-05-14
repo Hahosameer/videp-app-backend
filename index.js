@@ -25,6 +25,9 @@ app.use("/api/users" ,userRoutes)
 app.use("/api/videos" ,videoRoutes)
 app.use("/api/comments" ,commentRoutes)
 
+app.get("/" , (req, res) =>{
+res.json({message: "deploy successful"})
+})
 
 app.use((err , req ,res ,next) => {
   const status = err.status || 500
