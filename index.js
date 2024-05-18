@@ -28,7 +28,7 @@ app.use("/api/videos" ,videoRoutes)
 app.use("/api/comments" ,commentRoutes)
 
 app.get("/" , (req, res) =>{
-res.json({message: "deploy successful"})
+res.json({message: "deploy backend successful"})
 })
 
 app.use((err , req ,res ,next) => {
