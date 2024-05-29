@@ -15,7 +15,10 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://video-app-frontend-pearl.vercel.app",
+    origin: [
+      "http://localhost:5173",
+      "https://video-app-frontend-pearl.vercel.app",
+    ],
     credentials: true,
   })
 );
