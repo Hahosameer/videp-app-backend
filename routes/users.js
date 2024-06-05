@@ -28,7 +28,7 @@ router.put("/sub/:id", virifyToken, subscribe);
 // UNSUBSCRIBE A USER
 router.put("/unsub/:id", virifyToken, unSubscribe);
 
-// LIKE A USER
+// LIKE A USER 
 router.put("/like/:videoId", virifyToken, like);
 
 // DISLIKE A USER
