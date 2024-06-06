@@ -13,21 +13,22 @@ const PORT = 5000;
 app.use(express.json());
 
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://video-app-frontend-pearl.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
 // app.use(
 //   cors({
-//     origin: [
-//       "http://localhost:5173",
-//       "https://video-app-frontend-pearl.vercel.app",
-//     ],
+//     origin: "https://video-app-frontend-pearl.vercel.app",
 //     credentials: true,
 //   })
 // );
-
-app.use(
-  cors({
-    origin: "https://video-app-frontend-pearl.vercel.app",
-  })
-);
 
 
 
