@@ -9,10 +9,6 @@ import cors from "cors"
 const app = express()
 
 const PORT = 5000;
-
-app.use(express.json());
-
-
 app.use(
   cors({
     origin: [
@@ -22,6 +18,11 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json());
+
+
+
+
 
 // app.use(
 //   cors({
@@ -57,4 +58,4 @@ connectDB();
 
 app.listen(PORT, () => {
   console.log(`Server is Running at  http://localhost:${PORT}`);
-});
+}); 
