@@ -1,105 +1,59 @@
-import express from "express"
+import express from "express";
 import { connectDB } from "./config/default.js";
-import userRoutes from './routes/users.js';
-import videoRoutes from './routes/videos.js';
-import commentRoutes from './routes/comments.js';
+import userRoutes from "./routes/users.js";
+import videoRoutes from "./routes/videos.js";
+import commentRoutes from "./routes/comments.js";
 import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
-import cors from "cors"
-const app = express()
+import cors from "cors";
 
-const PORT = 5000;
+// Initialize Express app
+const app = express();
+const PORT = process.env.PORT || 5000; // Set port from environment or default to 5000
 
+// Parse JSON and cookies
 app.use(express.json());
+app.use(cookieParser());
 
-
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:5173",
-//       "https://video-app-frontend-pearl.vercel.app",
-//     ],
-//     credentials: true,
-//   })
-// );
-
+// CORS configuration
 app.use(
   cors({
-    origin: "https://video-app-frontend-pearl.vercel.app",
-    credentials: true,
+    origin: [
+      "http://localhost:5173", // Local frontend
+      "https://video-app-frontend-pearl.vercel.app", // Deployed frontend
+    ],
+    credentials: true, // Allow credentials like cookies
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow headers
   })
 );
 
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/videos", videoRoutes);
+app.use("/api/comments", commentRoutes);
 
+// Basic route to check server health
+app.get("/", (req, res) => {
+  res.json({ message: "Backend deployed successfully" });
+});
 
-// Apply the rate limiting middleware to all requests.
-app.use(cookieParser())
-app.use("/api/auth" ,authRoutes)
-app.use("/api/users" ,userRoutes)
-app.use("/api/videos" ,videoRoutes)
-app.use("/api/comments" ,commentRoutes)
-
-app.get("/" , (req, res) =>{
-res.json({message: "deploy backend successful"})
-})
-
-app.use((err , req ,res ,next) => {
-  const status = err.status || 500
-  const message = err.message || "something went wrong"
+// Error handling middleware
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Something went wrong";
   return res.status(status).json({
     success: false,
     status,
     message,
+  });
+});
 
-  })
-})
+// Connect to the database
 connectDB();
 
+// Start the server
 app.listen(PORT, () => {
-  console.log(`Server is Running at  http://localhost:${PORT}`);
+  console.log(`Server is running at http://localhost:${PORT}`);
 });
-// import express from "express";
-// import cors from "cors";
-// import cookieParser from "cookie-parser";
-
-// const app = express();
-
-// // CORS configuration
-// app.use(
-//   cors({
-//     origin: "https://video-app-frontend-pearl.vercel.app", // your frontend domain
-//     credentials: true,
-//   })
-// );
-
-// app.use(express.json());
-// app.use(cookieParser());
-
-// // Your routes
-// app.use("/api/auth", authRoutes);
-// app.use("/api/users", userRoutes);
-// app.use("/api/videos", videoRoutes);
-// app.use("/api/comments", commentRoutes);
-
-// app.get("/", (req, res) => {
-//   res.json({ message: "deploy backend successful" });
-// });
-
-// // Error handling middleware
-// app.use((err, req, res, next) => {
-//   const status = err.status || 500;
-//   const message = err.message || "Something went wrong";
-//   return res.status(status).json({
-//     success: false,
-//     status,
-//     message,
-//   });
-// });
-// connectDB();
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running at http://localhost:${PORT}`);
-// });
-
-// // Connect to database
