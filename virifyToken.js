@@ -1,17 +1,36 @@
+// import jwt from "jsonwebtoken";
+// import {createError} from './error.js'
+// export const virifyToken = async (req, res, next) => {
+//   // const token = req.headers.token;
+//   // console.log("request header", req.headers);
+
+//   const token = await req.headers.cookie.split('=')[1];
+
+//   if (!token) return next(createError(401, "You are not authenticated"));
+
+//   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+//     if (err) return next(createError(403, "Token is not valid"));
+
+//     req.user = user;
+//     next();
+//   });
+// }
 import jwt from "jsonwebtoken";
-import {createError} from './error.js'
-export const virifyToken = async (req, res, next) => {
-  // const token = req.headers.token;
-  // console.log("request header", req.headers);
 
-  const token = await req.headers.cookie.split('=')[1];
+export  const virifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1]; // This will fail if `authorization` is undefined
 
-  if (!token) return next(createError(401, "You are not authenticated"));
+  if (!token) {
+    return res.status(403).json("Token is required");
+  }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-    if (err) return next(createError(403, "Token is not valid"));
-
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json("Invalid token");
+    }
     req.user = user;
     next();
   });
-}
+};
+
+// default virifyToken;

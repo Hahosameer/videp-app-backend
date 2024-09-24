@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000; // Set port from environment or default t
 // Parse JSON and cookies
 app.use(express.json());
 app.use(cookieParser());
+app.options("*", cors());
 
 // CORS configuration
 app.use(
@@ -23,10 +24,11 @@ app.use(
       "https://video-app-frontend-pearl.vercel.app", // Deployed frontend
     ],
     credentials: true, // Allow credentials like cookies
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific HTTP methods
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow OPTIONS method for preflight requests
     allowedHeaders: ["Content-Type", "Authorization"], // Allow headers
   })
 );
+
 
 // Routes
 app.use("/api/auth", authRoutes);
